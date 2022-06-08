@@ -29,12 +29,13 @@ const getChartData = () => {
               // Remove Y Axis grid line at start of chart
               borderWidth: 1,
               // Add borderRadius to each bar
-              borderRadius: 3,
+              borderRadius: 5,
               borderSkipped: false,
             },
           ],
         },
         options: {
+          maintainAspectRatio: false,
           plugins: {
             // Remove legend on the top of chart
             legend: {
