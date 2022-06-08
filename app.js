@@ -5,8 +5,13 @@ const getChartData = () => {
   fetch("data.json")
     .then((res) => res.json())
     .then((chartData) => {
-      console.log(new Date().getDay());
       // Chart JS
+
+      const labelTooltip = (chartData) => {
+        // Function to remove hover title on each bar
+        return "";
+      };
+
       const ctx = document.getElementById("myChart").getContext("2d");
       const myChart = new Chart(ctx, {
         type: "bar",
@@ -26,6 +31,15 @@ const getChartData = () => {
                   return "hsl(10, 79%, 65%)";
                 }
               }),
+              // Hover Color Change
+              hoverBackgroundColor: chartData.map((_, i) => {
+                if (i === new Date().getDay() - 1) {
+                  // Remove one from current day because i starts at 0
+                  return "hsl(186, 34%, 70%)";
+                } else {
+                  return "hsl(10, 79%, 75%)";
+                }
+              }),
               // Remove Y Axis grid line at start of chart
               borderWidth: 1,
               // Add borderRadius to each bar
@@ -35,11 +49,26 @@ const getChartData = () => {
           ],
         },
         options: {
+          // Make cursor pointer on hover of each bar
+          onHover: (e, chartEl) => {
+            if (chartEl.length === 1) {
+              e.native.target.style.cursor = "pointer";
+            } else {
+              e.native.target.style.cursor = "default";
+            }
+          },
+          // Remove aspect ratio for custom sizing
           maintainAspectRatio: false,
           plugins: {
             // Remove legend on the top of chart
             legend: {
               display: false,
+            },
+            tooltip: {
+              displayColors: false,
+              callbacks: {
+                title: labelTooltip,
+              },
             },
           },
           scales: {
